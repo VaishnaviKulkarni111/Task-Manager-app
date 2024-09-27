@@ -1,0 +1,18 @@
+.dashboard {
+    display: flex;
+  }
+  
+  .dashboard-content {
+    margin-left: 200px; /* Adjust according to your existing Navbar width */
+    padding: 20px;
+    background-color: #f4f7fa;
+  }
+  
+  .table {
+    margin-top: 20px;
+  }
+  
+  .list-group-item {
+    border: 1px solid #ddd;
+  }
+  
