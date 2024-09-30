@@ -16,9 +16,9 @@ export const loginUser = createAsyncThunk(
 
       if (data.status === 'ok') {
         // Store token and userType locally
-        window.localStorage.setItem('token', data.data);
+        window.localStorage.setItem('token', data.data.token);
         window.localStorage.setItem('loggedIn', true);
-        
+        window.localStorage.setItem('userType', data.data.userType)
         // Return the token and userType if available
         return { token: data.data, userType: data.userType };
       } else {

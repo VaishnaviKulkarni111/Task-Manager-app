@@ -38,9 +38,9 @@ export default function SignUp() {
   
           // Redirect based on userType
           if (userType === "Admin") {
-            window.location.href = "/admin-dashboard";
+            window.location.href = "/dashboard";
           } else {
-            window.location.href = "/user-dashboard";
+            window.location.href = "/tasks";
           }
         } else {
           alert("User registration succeeded, but no token received.");

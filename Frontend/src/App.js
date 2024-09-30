@@ -9,6 +9,7 @@ import SignUp from "./components/signup_component";
 import UserDetails from "./components/userDetails";
 import Dashboard from "./UI/Dashboard";
 import Tasks from "./UI/Tasks";
+import UserDashboard from "./UI/UserDashboard";
 
 function App() {
   const isLoggedIn = window.localStorage.getItem("loggedIn");
@@ -26,6 +27,8 @@ function App() {
           <Route path="/sign-in" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/userboard" element={<UserDashboard />} />
+
           <Route path="/tasks" element={<Tasks />} />
           <Route path="/userDetails" element={<UserDetails />} />
         </Routes>

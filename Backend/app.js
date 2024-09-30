@@ -41,18 +41,35 @@ app.post("/register", async (req, res) => {
     if (oldUser) {
       return res.json({ error: "User Exists" });
     }
-    await User.create({
+
+    const user = await User.create({
       fname,
       lname,
       email,
       password: encryptedPassword,
       userType,
     });
-    res.send({ status: "ok" });
+
+    // Generate JWT token after successful registration
+    const token = jwt.sign(
+      { email: user.email, userType: user.userType },
+      JWT_SECRET,
+      { expiresIn: "1h" }  // Token expires in 1 hour
+    );
+
+    // Send the token and userType in the response
+    res.json({
+      status: "ok",
+      data: {
+        token: token,   // Token sent to the frontend
+        userType: user.userType  // User type for conditional redirection
+      }
+    });
   } catch (error) {
     res.send({ status: "error" });
   }
 });
+
 
 app.post("/login-user", async (req, res) => {
   const { email, password } = req.body;
@@ -67,8 +84,14 @@ app.post("/login-user", async (req, res) => {
     });
 
     if (res.status(201)) {
-      return res.json({ status: "ok", data: token });
-    } else {
+      return res.json({
+        status: "ok",
+        data: {
+          token,
+          userType: user.userType, // Send userType here
+        },
+      });
+        } else {
       return res.json({ error: "error" });
     }
   }

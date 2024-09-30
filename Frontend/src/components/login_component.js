@@ -11,16 +11,22 @@ export default function Login() {
 
   async function handleSubmit(e) {
     e.preventDefault();
-
     console.log(email, password);
     
     // Dispatch the loginUser action with email and password
     const resultAction = await dispatch(loginUser({ email, password }));
     
     if (loginUser.fulfilled.match(resultAction)) {
-      // If login is successful, navigate to the dashboard
+      // Check the userType and navigate accordingly
+      const userType = resultAction.payload.userType; // Assuming userType is returned from API
+      console.log("UserType from API:", userType); 
       alert("Login successful");
-      navigate("./dashboard"); // Redirect to dashboard
+      
+      if (userType === 'Admin') {
+        navigate("/dashboard"); // Absolute path for Admin
+      } else {
+        navigate("/userboard"); // Absolute path for User
+      }
     } else {
       // If login fails, show error message
       alert("Invalid credentials, please try again");
