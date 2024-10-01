@@ -18,9 +18,9 @@ export const loginUser = createAsyncThunk(
         // Store token and userType locally
         window.localStorage.setItem('token', data.data.token);
         window.localStorage.setItem('loggedIn', true);
-        window.localStorage.setItem('userType', data.data.userType)
+        window.localStorage.setItem('userType', data.data.userType);
         // Return the token and userType if available
-        return { token: data.data, userType: data.userType };
+        return { token: data.data.token, userType: data.data.userType };
       } else {
         return rejectWithValue(data.message);
       }
@@ -32,35 +32,34 @@ export const loginUser = createAsyncThunk(
 
 // Async action for register
 export const registerUser = createAsyncThunk(
-    'auth/registerUser',
-    async ({ fname, lname, email, password, userType }, { rejectWithValue }) => {
-      try {
-        const response = await fetch('http://localhost:5000/register', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            fname,
-            lname,
-            email,
-            password,
-            userType,
-          }),
-        });
-        const data = await response.json();
-  
-        if (data.status === 'ok') {
-          return data; // Assuming data contains {token, userType}
-        } else {
-          return rejectWithValue(data.message); // Pass the error message for rejection
-        }
-      } catch (error) {
-        return rejectWithValue(error.message); // Handle network errors
+  'auth/registerUser',
+  async ({ fname, lname, email, password, userType }, { rejectWithValue }) => {
+    try {
+      const response = await fetch('http://localhost:5000/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          fname,
+          lname,
+          email,
+          password,
+          userType,
+        }),
+      });
+      const data = await response.json();
+
+      if (data.status === 'ok') {
+        return { token: data.data.token, userType: data.data.userType }; // Return token and userType
+      } else {
+        return rejectWithValue(data.message);
       }
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
-  );
-  
+  }
+);
 
 // Initial state
 const initialState = {
@@ -99,7 +98,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action.payload;
       });
-    
+
     // Handle register
     builder
       .addCase(registerUser.pending, (state) => {

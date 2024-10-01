@@ -11,7 +11,7 @@ export default function AdminHome({ userData }) {
   }, []);
 
   const getAllUser = () => {
-    fetch("http://localhost:5000/getAllUser", {
+    fetch("http://localhost:5000/api/getAllUser", {
       method: "GET",
     })
       .then((res) => res.json())
@@ -23,7 +23,7 @@ export default function AdminHome({ userData }) {
 
   const deleteUser = (id, name) => {
     if (window.confirm(`Are you sure you want to delete ${name}?`)) {
-      fetch("http://localhost:5000/deleteUser", {
+      fetch("http://localhost:5000/api/deleteUser", {
         method: "POST",
         crossDomain: true,
         headers: {
