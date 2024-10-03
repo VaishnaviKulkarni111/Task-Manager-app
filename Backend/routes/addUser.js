@@ -8,10 +8,13 @@ const JWT_SECRET = "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi782
 
 // POST request to add a new user (Admin only)
 router.post("/addUser", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { fname, lname, email, password } = req.body;  // Extract fname and lname from req.body
+
 
   // Hash the password
   const encryptedPassword = await bcrypt.hash(password, 10);
+  console.log("Hashed encryptedPassword:", encryptedPassword);
+
 
   try {
     // Check if user already exists
@@ -22,7 +25,8 @@ router.post("/addUser", async (req, res) => {
 
     // Create the new user
     const newUser = await User.create({
-      name,
+      fname,  // Store fname
+      lname,  // Store lname
       email,
       password: encryptedPassword,
       userType: "User",  // Default role is 'User'

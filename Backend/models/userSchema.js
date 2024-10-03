@@ -2,11 +2,11 @@ const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
   {
-    fname: String,
-    lname: String,
-    email: { type: String, unique: true },
-    password: String,
-    userType: String,
+    fname: { type: String, required: true },  // Add fname field
+    lname: { type: String, required: true },  // Add lname field
+    email: { type: String, required: true, unique: true },
+    password: { type: String, required: true },
+    userType: { type: String, default: "User" },
   },
   {
     collection: "UserInfo",

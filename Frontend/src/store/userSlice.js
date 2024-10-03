@@ -40,14 +40,14 @@ export const fetchUserData = createAsyncThunk(
 // Async thunk to add a new user
 export const addUser = createAsyncThunk(
   'user/addUser',
-  async ({ name, email, password }, { rejectWithValue }) => {
+  async ({ fname,lname, email, password }, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:5000/addUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ fname,lname, email, password }),
       });
 
       const data = await response.json();
@@ -104,10 +104,7 @@ const userSlice = createSlice({
   },
 });
 
-// Export the setUserData action
 export const { setUserData } = userSlice.actions;
-
-// No need to export addUser again, it is already available as a named export from createAsyncThunk
 
 // Export the reducer
 export default userSlice.reducer;

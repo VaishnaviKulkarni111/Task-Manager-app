@@ -36,7 +36,8 @@ export default function SignUp() {
         alert("Registration Successful");
         window.localStorage.setItem("token", token);
         window.localStorage.setItem("userType", userType);
-        
+        window.localStorage.setItem("loggedIn", true); // 
+
         // Redirect based on userType
         if (userType === "Admin") {
           window.location.href = "/dashboard";
