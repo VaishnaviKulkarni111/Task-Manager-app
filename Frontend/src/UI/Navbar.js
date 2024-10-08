@@ -23,9 +23,14 @@ const Navbar = () => {
             <Link to="/userboard">U.Dashboard</Link>
           </li>
         )}
-        <li className="nav-item">
+        {userType === 'Admin' && <li className="nav-item">
           <Link to="/tasks">Tasks</Link>
-        </li>
+        </li>}
+        {userType === 'User' && ( 
+          <li className="nav-item">
+            <Link to="/usertask">Your Tasks</Link>
+          </li>
+        )}
         <li className="nav-item">
           <Link to="/userDetails">Users</Link>
         </li>

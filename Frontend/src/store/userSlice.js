@@ -3,6 +3,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 // Initial state
 const initialState = {
   userData: {},
+  users: [],
   isAdmin: false,
   status: 'idle', // idle, loading, succeeded, failed
   error: null,
@@ -40,14 +41,14 @@ export const fetchUserData = createAsyncThunk(
 // Async thunk to add a new user
 export const addUser = createAsyncThunk(
   'user/addUser',
-  async ({ fname,lname, email, password }, { rejectWithValue }) => {
+  async ({ fname, lname, email, password }, { rejectWithValue }) => {
     try {
       const response = await fetch('http://localhost:5000/addUser', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ fname,lname, email, password }),
+        body: JSON.stringify({ fname, lname, email, password }),
       });
 
       const data = await response.json();
@@ -58,6 +59,34 @@ export const addUser = createAsyncThunk(
         return rejectWithValue(data.message);
       }
     } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
+// Async thunk to fetch all users
+export const fetchUsers = createAsyncThunk(
+  'user/fetchUsers',
+  async (token, { rejectWithValue }) => {
+    try {
+      const response = await fetch("http://localhost:5000/api/getAllUser", {
+        method: "GET", 
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+          Authorization: `Bearer ${token}`, // Only include if required
+        },
+      });
+      const data = await response.json();
+      console.log("Fetched users:", data); // Debugging line
+
+      if (data.error) {
+        return rejectWithValue(data.error);
+      }
+
+      return data; // Directly return the data object
+    } catch (error) {
+      console.error("Error fetching users:", error); // Debugging line
       return rejectWithValue(error.message);
     }
   }
@@ -76,28 +105,32 @@ const userSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+      // Fetch user data extra reducer
       .addCase(fetchUserData.pending, (state) => {
         state.status = 'loading';
       })
       .addCase(fetchUserData.fulfilled, (state, action) => {
+        console.log("Fetched user data:", action.payload); // Debugging
         state.status = 'succeeded';
         state.userData = action.payload;
         state.isAdmin = action.payload.userType === 'Admin';
       })
       .addCase(fetchUserData.rejected, (state, action) => {
+        console.log("Fetch user data rejected:", action.payload); // Debugging
         state.status = 'failed';
         state.error = action.payload;
       })
-      // Handle addUser
-      .addCase(addUser.pending, (state) => {
+      // Fetch all users extra reducer
+      .addCase(fetchUsers.pending, (state) => {
         state.status = 'loading';
       })
-      .addCase(addUser.fulfilled, (state, action) => {
+      .addCase(fetchUsers.fulfilled, (state, action) => {
+        console.log("Fetched all users:", action.payload); // Debugging
         state.status = 'succeeded';
-        // Optional: Add the new user data to the state
-        state.userData = action.payload; // Assuming you'll handle where to store the new user data
+        state.users = action.payload; // Store the fetched users
       })
-      .addCase(addUser.rejected, (state, action) => {
+      .addCase(fetchUsers.rejected, (state, action) => {
+        console.log("Fetch users rejected:", action.payload); // Debugging
         state.status = 'failed';
         state.error = action.payload;
       });

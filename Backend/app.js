@@ -2,12 +2,10 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
-const jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
 const userRoutes = require("./routes/userRoutes");
 const userActions = require("./routes/userActions");
 const addUser = require("./routes/addUser")
-
+const taskRoutes = require("./routes/taskRoutes")
 app.use(express.json());
 app.use(cors());
 app.set("view engine", "ejs");
@@ -31,6 +29,7 @@ mongoose
 // Include user routes
 app.use(userRoutes);
 app.use("/api", userActions); 
+app.use("/api/tasks", taskRoutes)
 app.use(addUser)
 app.listen(5000, () => {
   console.log("Server Started");
