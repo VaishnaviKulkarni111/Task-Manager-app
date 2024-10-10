@@ -1,31 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Container, Table } from 'react-bootstrap';
-import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchUserTasks } from '../store/taskSlice';
 
 export default function UserTasks() {
-  const [tasks, setTasks] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const dispatch = useDispatch();
+  const { tasks = [], loading = false, error = null } = useSelector((state) => state.tasks || {}); // Fallback to ensure destructuring
+  const { user } = useSelector((state) => state.auth); // Get the user from auth slice
 
   useEffect(() => {
-    const fetchTasks = async () => {
-      const token = window.localStorage.getItem('token');  // Assuming token is stored on login
-      const userId = window.localStorage.getItem('userId'); // Store userId in localStorage after login/signup
-
-      try {
-        const response = await axios.get(`/api/tasks/user-tasks/${userId}`, {
-          headers: { Authorization: `Bearer ${token}` },  // Send token for authorization if required
-        });
-        setTasks(response.data.tasks);
-        setLoading(false);
-      } catch (err) {
-        setError('Failed to fetch tasks');
-        setLoading(false);
-      }
-    };
-
-    fetchTasks();
-  }, []);
+    if (user && user._id) {
+      dispatch(fetchUserTasks(user._id)); // Fetch tasks for the logged-in user
+    }
+  }, [dispatch, user]);
 
   return (
     <Container className="mt-4">

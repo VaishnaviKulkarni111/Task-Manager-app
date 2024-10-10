@@ -1,9 +1,13 @@
 import React from 'react';
 import './Navbar.css'; 
 import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 const Navbar = () => {
+  const loggedIn = useSelector((state)=> state.auth.loggedIn)
+  
     const userType = window.localStorage.getItem('userType');
+
   console.log('usertype', userType)
   const logOut = () => {
     window.localStorage.clear();
@@ -11,7 +15,8 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar">
+    <>
+    {<nav className="navbar">
       <ul className="nav-list">
         {userType === 'Admin' && ( 
           <li className="nav-item">
@@ -43,7 +48,8 @@ const Navbar = () => {
           </button>
         </li>
       </ul>
-    </nav>
+    </nav>}
+    </>
   );
 };
 

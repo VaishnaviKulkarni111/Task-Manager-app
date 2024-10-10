@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Button, Modal, Form, Table } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchTasks, createTask, updateTaskStatus, deleteTask } from "../store/taskSlice";
+import { fetchTasks, createTask, updateTask, deleteTask } from "../store/taskSlice";
 import { fetchUsers } from "../store/userSlice"; // Ensure correct action is imported
 
 export default function Tasks() {
@@ -36,21 +36,24 @@ export default function Tasks() {
   }, [dispatch]);
 
   const handleAddTask = () => {
-    const newTask = {
+    const updatedTask = {
       name: newTaskName,
       status,
       assignedTo,
     };
-
+  
     if (editMode) {
-      dispatch(updateTaskStatus({ id: selectedTaskId, task: newTask }));
+      // Dispatch with individual fields (taskId and updated fields)
+      dispatch(updateTask({ taskId: selectedTaskId, ...updatedTask })); 
+      dispatch(fetchTasks())
     } else {
-      dispatch(createTask(newTask));
+      dispatch(createTask(updatedTask));
+      dispatch(fetchTasks())
     }
-
+  
     resetForm();
   };
-
+  
   const handleEditTask = (task) => {
     setEditMode(true);
     setSelectedTaskId(task._id);
@@ -62,6 +65,7 @@ export default function Tasks() {
 
   const handleDeleteTask = (id) => {
     dispatch(deleteTask(id));
+    dispatch(fetchTasks())
   };
 
   const resetForm = () => {

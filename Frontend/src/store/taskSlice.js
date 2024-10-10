@@ -35,31 +35,52 @@ export const fetchTasks = createAsyncThunk(
 );
 
 // Async thunk to update task status
-export const updateTaskStatus = createAsyncThunk(
-  'tasks/updateTaskStatus',
-  async ({ taskId, status }, { rejectWithValue }) => {
-    try {
-      const response = await axios.patch(`http://localhost:5000/api/tasks/${taskId}`, { status });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+// Async thunk to update task details (name, status, assignedTo)
+// Async thunk to update task details (name, status, assignedTo)
+export const updateTask = createAsyncThunk(
+    'tasks/updateTask',
+    async ({ taskId, name, status, assignedTo }, { rejectWithValue }) => {
+      try {
+        const response = await axios.patch(`http://localhost:5000/api/tasks/update-task/${taskId}`, {
+          name,
+          status,
+          assignedTo,
+        });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
     }
-  }
-);
-
+  );
+  
+  
 // Async thunk to delete a task
 export const deleteTask = createAsyncThunk(
-  'http://localhost:5000/tasks/deleteTask',
-  async (taskId, { rejectWithValue }) => {
-    try {
-      await axios.delete(`http://localhost:5000/api/tasks/${taskId}`);
-      return taskId;
-    } catch (error) {
-      return rejectWithValue(error.response.data);
+    'tasks/deleteTask',
+    async (taskId, { rejectWithValue }) => {
+      try {
+        await axios.delete(`http://localhost:5000/api/tasks/delete-task/${taskId}`);
+        return taskId;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
     }
-  }
-);
+  );
 
+  // Async thunk to fetch tasks for the logged-in user
+export const fetchUserTasks = createAsyncThunk(
+    'tasks/fetchUserTasks',
+    async (userId, { rejectWithValue }) => {
+      try {
+        const response = await axios.get(`http://localhost:5000/api/tasks/user-tasks/${userId}`);
+        return response.data.tasks;
+      } catch (error) {
+        return rejectWithValue(error.response.data);
+      }
+    }
+  );
+  
+  
 const taskSlice = createSlice({
   name: 'tasks',
   initialState,
@@ -85,7 +106,7 @@ const taskSlice = createSlice({
         state.loading = false;
       })
       
-      .addCase(updateTaskStatus.fulfilled, (state, action) => {
+      .addCase(updateTask.fulfilled, (state, action) => {
         const index = state.tasks.findIndex(task => task.id === action.payload.id);
         if (index !== -1) {
           state.tasks[index].status = action.payload.status;
@@ -94,6 +115,10 @@ const taskSlice = createSlice({
       })
       .addCase(deleteTask.fulfilled, (state, action) => {
         state.tasks = state.tasks.filter(task => task.id !== action.payload);
+        state.loading = false;
+      })
+      .addCase(fetchUserTasks.fulfilled, (state, action) => {
+        state.tasks = action.payload;
         state.loading = false;
       })
       .addMatcher(
@@ -108,7 +133,8 @@ const taskSlice = createSlice({
           state.loading = false;
           state.error = action.payload;
         }
-      );
+      )
+     ;
   }
 });
 
