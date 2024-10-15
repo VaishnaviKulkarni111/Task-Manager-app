@@ -5,12 +5,20 @@ import { fetchUserTasks } from '../store/taskSlice';
 
 export default function UserTasks() {
   const dispatch = useDispatch();
-  const { tasks = [], loading = false, error = null } = useSelector((state) => state.tasks || {}); // Fallback to ensure destructuring
-  const { user } = useSelector((state) => state.auth); // Get the user from auth slice
+
+  // Check if the user exists in auth slice
+  const user = useSelector((state) => state.user.userData);
+  console.log("user", user); // Log the user to see if it's being fetched
+
+  // Get tasks from task slice, with a fallback to an empty array
+  const { tasks = [], loading = false, error = null } = useSelector((state) => {
+    return state.task || {};
+  });
 
   useEffect(() => {
+    // Ensure we only dispatch fetchUserTasks if user exists
     if (user && user._id) {
-      dispatch(fetchUserTasks(user._id)); // Fetch tasks for the logged-in user
+      dispatch(fetchUserTasks(user._id)); // Dispatch with correct user ID
     }
   }, [dispatch, user]);
 

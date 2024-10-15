@@ -1,5 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 
+
+// Initial state
+const initialState = {
+  token: null,
+  userType: null,
+  user: null,
+  loading: false,
+  error: null,
+};
 // Async action for login
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
@@ -20,7 +29,10 @@ export const loginUser = createAsyncThunk(
         window.localStorage.setItem('loggedIn', true);
         window.localStorage.setItem('userType', data.data.userType);
         // Return the token and userType if available
-        return { token: data.data.token, userType: data.data.userType };
+        return { token: data.data.token,
+           userType: data.data.userType,
+           user: data.data.user, 
+           };
       } else {
         return rejectWithValue(data.message);
       }
@@ -61,14 +73,7 @@ export const registerUser = createAsyncThunk(
   }
 );
 
-// Initial state
-const initialState = {
-  token: null,
-  userType: null,
-  user: null,
-  loading: false,
-  error: null,
-};
+
 
 // Auth slice
 const authSlice = createSlice({
@@ -93,6 +98,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.token = action.payload.token; // Store the token
         state.userType = action.payload.userType; // Store the userType
+        state.user = action.payload.user; 
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.loading = false;

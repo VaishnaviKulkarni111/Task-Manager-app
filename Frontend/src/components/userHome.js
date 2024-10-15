@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 export default function UserHome() {
   const userData = useSelector((state) => state.user.userData);
-
+  console.log("us home", userData)
   if (!userData || Object.keys(userData).length === 0) {
     return <div>Loading user data...</div>; 
   }
