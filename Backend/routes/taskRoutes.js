@@ -94,4 +94,28 @@ router.delete('/delete-task/:taskId', async (req, res) => {
   }
 });
 
+// Route for user to update task status only
+router.patch('/update-task-status/:taskId', async (req, res) => {
+  const { taskId } = req.params;
+  const { status } = req.body; // Only the status field is required from the user
+
+  try {
+    const updatedTask = await Task.findByIdAndUpdate(
+      taskId,
+      { status }, // Only update the status field
+      { new: true }
+    );
+
+    if (!updatedTask) {
+      return res.status(404).json({ message: 'Task not found' });
+    }
+
+    res.status(200).json({  task: updatedTask });
+  } catch (error) {
+    console.error('Error updating task status:', error);
+    res.status(500).json({ message: 'Error updating task status' });
+  }
+});
+
+
 module.exports = router;

@@ -81,6 +81,33 @@ export const fetchUserTasks = createAsyncThunk(
   }
 );
 
+export const updateTaskStatus = createAsyncThunk(
+  'tasks/updateTaskStatus',
+  async ({ taskId, status }, { rejectWithValue }) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/tasks/update-task-status/${taskId}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ status }),
+      });
+      const data = await response.json();
+        
+      if (!response.ok) { 
+        throw new Error(data.message || 'Failed to fetch tasks');
+      }
+      if (data.status === 'ok') {
+        return data.task; // Return the updated task
+      } else {
+        return rejectWithValue(data.message);
+      }
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 
 const taskSlice = createSlice({
   name: 'tasks',
@@ -120,6 +147,17 @@ const taskSlice = createSlice({
         state.tasks = action.payload; // Set the tasks for the user
         state.loading = false;
       })
+      .addCase(updateTaskStatus.fulfilled, (state, action) => {
+        console.log("Updated task:", action.payload); // Log the updated task
+        const index = state.tasks.findIndex(task => task._id === action.payload._id);
+        if (index !== -1) {
+          state.tasks[index] = action.payload; // Update the task with new status
+        }
+        state.loading = false;  // Reset loading state after the update
+      })      
+      .addCase(updateTaskStatus.rejected, (state, action) => {
+        state.error = action.payload;
+      })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),
         (state) => {
@@ -130,10 +168,10 @@ const taskSlice = createSlice({
         (action) => action.type.endsWith('/rejected'),
         (state, action) => {
           state.loading = false;
-          state.error = action.payload; // This should log any errors.
-          console.error("Fetch User Tasks Error:", action.payload);
+          state.error = action.payload;
+          console.error("Fetch User Tasks Error:", action.payload); // Log errors
         }
-    )
+      ) 
     ;
   },
 });
