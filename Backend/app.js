@@ -11,7 +11,6 @@ app.use(cors());
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
-const JWT_SECRET = "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
 
 const mongoUrl = "mongodb+srv://vaishnavirk2203:mbZiezno1OlnZg9h@diet-planner.4pdqs.mongodb.net/?retryWrites=true&w=majority&appName=Diet-Planner";
 

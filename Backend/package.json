@@ -9,8 +9,11 @@
   "author": "vaishnavi",
   "license": "ISC",
   "dependencies": {
+    "@slack/web-api": "^7.6.0",
+    "axios": "^1.7.7",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "jsonwebtoken": "^8.5.1",

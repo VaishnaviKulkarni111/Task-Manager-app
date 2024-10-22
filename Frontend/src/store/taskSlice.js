@@ -85,28 +85,19 @@ export const updateTaskStatus = createAsyncThunk(
   'tasks/updateTaskStatus',
   async ({ taskId, status }, { rejectWithValue }) => {
     try {
-      const response = await fetch(`http://localhost:5000/api/tasks/update-task-status/${taskId}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ status }),
+      const response = await axios.patch(`http://localhost:5000/api/tasks/update-task-status/${taskId}`, {
+        status,
       });
-      const data = await response.json();
-        
-      if (!response.ok) { 
-        throw new Error(data.message || 'Failed to fetch tasks');
-      }
-      if (data.status === 'ok') {
-        return data.task; // Return the updated task
-      } else {
-        return rejectWithValue(data.message);
-      }
+      return response.data.task; // Return updated task data
     } catch (error) {
-      return rejectWithValue(error.message);
+      // Log the error for debugging purposes
+      console.error('Error in updateTaskStatus:', error);
+      // Return a rejection with a more detailed error message
+      return rejectWithValue(error.response ? error.response.data : 'Server Error');
     }
   }
 );
+
 
 
 const taskSlice = createSlice({
@@ -146,17 +137,23 @@ const taskSlice = createSlice({
       .addCase(fetchUserTasks.fulfilled, (state, action) => {
         state.tasks = action.payload; // Set the tasks for the user
         state.loading = false;
+        state.error = null;
+      })
+      .addCase(fetchUserTasks.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message || 'Error fetching tasks';
       })
       .addCase(updateTaskStatus.fulfilled, (state, action) => {
-        console.log("Updated task:", action.payload); // Log the updated task
-        const index = state.tasks.findIndex(task => task._id === action.payload._id);
-        if (index !== -1) {
-          state.tasks[index] = action.payload; // Update the task with new status
-        }
-        state.loading = false;  // Reset loading state after the update
-      })      
+        // Successfully updated task status
+        const updatedTask = action.payload;
+        state.tasks = state.tasks.map((task) =>
+          task._id === updatedTask._id ? updatedTask : task
+        );
+        state.error = null;
+      })
       .addCase(updateTaskStatus.rejected, (state, action) => {
-        state.error = action.payload;
+        state.error = action.payload || 'Error updating task status';
+        console.error('Fetch User Tasks Error:', state.error); // Log the exact error
       })
       .addMatcher(
         (action) => action.type.endsWith('/pending'),

@@ -44,80 +44,78 @@ const UserDashboard = () => {
   }
 
   return (
-    <div style={{ display: 'flex', padding: '20px', marginLeft: '150px', width: 'calc(100% - 150px)', boxSizing: 'border-box' }}> 
-    <div style={{ flex: 1, backgroundColor: '#f4f4f4', padding: '20px', borderRadius: '8px' }}>
-    <Container className="mt-4">
-      <h2>Welcome {user.fname}</h2>
-      <Row>
-        {/* Dashboard Widgets */}
-        <Col md={8}>
-          <Row>
-            <Col md={6}>
-              <Card className="mb-4">
-                <Card.Body>
-                  <Card.Title>Recent Activities</Card.Title>
-                  <Card.Text>
-                    {/* Placeholder for recent activities */}
-                    No recent activities.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-            <Col md={6}>
-              <Card className="mb-4">
-                <Card.Body>
-                  <Card.Title>Progress Tracker</Card.Title>
-                  <Card.Text>
-                    {/* Placeholder for progress tracking */}
-                    Your progress will be displayed here.
-                  </Card.Text>
-                </Card.Body>
-              </Card>
-            </Col>
-          </Row>
-        </Col>
-         {/* User Profile Overview */}
-         <Col md={4}>
-          <Card className="mb-4">
-            <Card.Body>
-              <Card.Title>
-                {user.fname} {user.lname}
-              </Card.Title>
-              <Card.Text>Email: {user.email}</Card.Text>
-              <Button variant="primary">Edit Profile</Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+    <div style={{ display: 'flex', padding: '20px', backgroundColor: '#f4f4f4', boxSizing: 'border-box', marginLeft: '200px', width: 'calc(100% - 200px)' }}>
+      <Container className="mt-4">
+        <h2>Welcome {user.fname}</h2>
+        <Row>
+          {/* Dashboard Widgets */}
+          <Col md={8}>
+            <Row>
+              <Col md={6}>
+                <Card className="mb-4">
+                  <Card.Body>
+                    <Card.Title>Recent Activities</Card.Title>
+                    <Card.Text>
+                      {/* Placeholder for recent activities */}
+                      No recent activities.
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+              <Col md={6}>
+                <Card className="mb-4">
+                  <Card.Body>
+                    <Card.Title>Progress Tracker</Card.Title>
+                    <Card.Text>
+                      {/* Placeholder for progress tracking */}
+                      Your progress will be displayed here.
+                    </Card.Text>
+                  </Card.Body>
+                </Card>
+              </Col>
+            </Row>
+          </Col>
+          {/* User Profile Overview */}
+          <Col md={4}>
+            <Card className="mb-4">
+              <Card.Body>
+                <Card.Title>
+                  {user.fname} {user.lname}
+                </Card.Title>
+                <Card.Text>Email: {user.email}</Card.Text>
+                <Button variant="primary">Edit Profile</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-      {/* Notifications Area */}
-      <Row>
-        <Col md={12}>
-          <Card className="mt-4">
-            <Card.Body>
-              <Card.Title>Notifications</Card.Title>
-              <Card.Text>
-                {/* Placeholder for notifications */}
-                You have no new notifications.
-              </Card.Text>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
+        {/* Notifications Area */}
+        <Row>
+          <Col md={12}>
+            <Card className="mt-4">
+              <Card.Body>
+                <Card.Title>Notifications</Card.Title>
+                <Card.Text>
+                  {/* Placeholder for notifications */}
+                  You have no new notifications.
+                </Card.Text>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
 
-      {/* Feedback Section */}
-      <Row>
-        <Col md={12}>
-          <Card className="mt-4">
-            <Card.Body>
-              <Card.Title>Feedback</Card.Title>
-              <Button variant="outline-primary">Give Feedback</Button>
-            </Card.Body>
-          </Card>
-        </Col>
-      </Row>
-    </Container>
-    </div>
+        {/* Feedback Section */}
+        <Row>
+          <Col md={12}>
+            <Card className="mt-4">
+              <Card.Body>
+                <Card.Title>Feedback</Card.Title>
+                <Button variant="outline-primary">Give Feedback</Button>
+              </Card.Body>
+            </Card>
+          </Col>
+        </Row>
+      </Container>
     </div>
   );
 };
