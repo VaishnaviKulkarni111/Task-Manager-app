@@ -78,7 +78,6 @@ export const fetchUsers = createAsyncThunk(
         },
       });
       const data = await response.json();
-      console.log("Fetched users:", data); // Debugging line
 
       if (data.error) {
         return rejectWithValue(data.error);

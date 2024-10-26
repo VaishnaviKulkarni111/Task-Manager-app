@@ -9,7 +9,6 @@ export default function Tasks() {
   const tasks = useSelector((state) => state.task.tasks) || []; 
   const users = useSelector((state) => state.user.users) || [];
   console.log("users", users)
-  const error = useSelector((state) => state.task.error);
 
   const [showModal, setShowModal] = useState(false);
   const [editMode, setEditMode] = useState(false);
@@ -138,7 +137,9 @@ export default function Tasks() {
                 </tr> )
 })
             ) : (
-              <p>No tasks available</p>
+              <tr>
+              <td colSpan="4" className="text-center">No tasks available</td>
+            </tr>
             )}
           </tbody>
         </Table>

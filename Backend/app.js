@@ -1,11 +1,15 @@
 const express = require("express");
+require('dotenv').config();
+
 const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const userRoutes = require("./routes/userRoutes");
 const userActions = require("./routes/userActions");
 const addUser = require("./routes/addUser")
-const taskRoutes = require("./routes/taskRoutes")
+const taskRoutes = require("./routes/taskRoutes");
+const slackController = require("./controllers/slackController");
+
 app.use(express.json());
 app.use(cors());
 app.set("view engine", "ejs");
@@ -21,7 +25,10 @@ mongoose
     tlsInsecure: true,
   })
   .then(() => {
+    mongoose.set('bufferCommands', false); // Disable buffering
+    mongoose.set('bufferTimeoutMS', 20000);
     console.log("Connected to database");
+
   })
   .catch((e) => console.log(e));
 
@@ -29,6 +36,11 @@ mongoose
 app.use(userRoutes);
 app.use("/api", userActions); 
 app.use("/api/tasks", taskRoutes)
+app.post('/slack/assign', (req, res, next) => {
+  console.log('POST /slack/assign route hit');
+  next(); // Continue to the controller
+}, slackController.assignTask);
+
 app.use(addUser)
 app.listen(5000, () => {
   console.log("Server Started");

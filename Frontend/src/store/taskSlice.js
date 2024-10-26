@@ -14,13 +14,32 @@ export const createTask = createAsyncThunk(
   'tasks/createTask',
   async (taskData, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:5000/api/tasks/add-task', taskData);
-      return response.data.task; // Return the created task
+      // First, create the task
+      const taskResponse = await axios.post('http://localhost:5000/api/tasks/add-task', taskData);
+      const createdTask = taskResponse.data.task;
+      console.log("Created Task:", createdTask);
+
+      // Fetch user email based on assignedTo ID
+      const userResponse = await axios.get(`http://localhost:5000/${createdTask.assignedTo}`);
+      const userEmail = userResponse.data.email; // Adjust based on your backend response
+
+      // Send Slack notification if we successfully retrieved the email
+      if (userEmail) {
+        const slackResponse = await axios.post('http://localhost:5000/slack/assign', {
+          name: createdTask.name,
+          assignedTo: userEmail,
+        });
+        console.log("Slack Response:", slackResponse.data);
+      }
+
+      return createdTask;
     } catch (error) {
+      console.error("Error in createTask:", error);
       return rejectWithValue(error.response.data);
     }
   }
 );
+
 
 // Async thunk to fetch all tasks
 export const fetchTasks = createAsyncThunk(

@@ -2,7 +2,7 @@ const express = require("express");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const User = require("../models/userSchema");
-
+const controller = require("../controllers/slackController")
 const router = express.Router();
 
 const JWT_SECRET = "hvdvay6ert72839289()aiyg8t87qt72393293883uhefiuh78ttq3ifi78272jbkj?[]]pou89ywe";
@@ -108,6 +108,23 @@ router.post("/userData", async (req, res) => {
         res.send({ status: "error", data: error });
       });
   } catch (error) {}
+});
+
+router.get('/:id', async (req, res) => {
+  if (req.params.id.match(/^[0-9a-fA-F]{24}$/)) { // Confirm valid MongoDB ObjectId
+    try {
+      const user = await User.findById(req.params.id);
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.status(200).json({ email: user.email });
+    } catch (error) {
+      console.error("Error fetching user:", error);
+      res.status(500).json({ message: 'Error fetching user' });
+    }
+  } else {
+    res.status(400).json({ message: 'Invalid user ID' });
+  }
 });
 
 module.exports = router;

@@ -13,7 +13,7 @@ router.get("/getAllUser", async (req, res) => {
   try {
     const allUser = await User.find({});
     res.send({ status: "ok", data: allUser });
-    console.log("all user", allUser)
+   // console.log("all user", allUser)
   } catch (error) {
     console.log(error);
   }
