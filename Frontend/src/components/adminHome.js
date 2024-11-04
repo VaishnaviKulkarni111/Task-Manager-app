@@ -36,20 +36,20 @@ export default function AdminHome({ userData }) {
         }),
       })
         .then((res) => res.json())
-        .then((data) => {
+        .then(() => {
           getAllUser();
         });
     }
   };
 
   return (
-    <Container fluid className="mt-4" style={{ marginLeft: '150px' }}> {/* Adjust margin for Navbar */}
+    <Container fluid className="mt-4" style={{ marginLeft: '150px' }}>
       <Row className="justify-content-center mb-4">
         <Col xs="auto">
-          <h3 className="text-center">Registered Users</h3> {/* Center the heading */}
+          <h3 className="text-center">Registered Users</h3>
         </Col>
       </Row>
-      <Table striped bordered hover style={{ width: '80%', margin: '0 auto' }}> {/* Adjusted table width */}
+      <Table striped bordered hover style={{ width: '80%', margin: '0 auto' }}>
         <thead>
           <tr>
             <th>Name</th>
@@ -68,7 +68,7 @@ export default function AdminHome({ userData }) {
                 <FontAwesomeIcon
                   icon={faTrash}
                   onClick={() => deleteUser(i._id, i.fname)}
-                  style={{ cursor: 'pointer', color: 'red' }} // Change icon color to red
+                  style={{ cursor: 'pointer', color: 'red' }}
                 />
               </td>
             </tr>
