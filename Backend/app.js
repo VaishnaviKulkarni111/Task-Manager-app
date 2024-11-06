@@ -8,6 +8,7 @@ const userRoutes = require("./routes/userRoutes");
 const userActions = require("./routes/userActions");
 const addUser = require("./routes/addUser")
 const taskRoutes = require("./routes/taskRoutes");
+const dashboardRoutes = require("./routes/dashboardRoutes")
 const slackController = require("./controllers/slackController");
 
 app.use(express.json());
@@ -16,13 +17,14 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 
-const mongoUrl = "mongodb+srv://vaishnavirk2203:mbZiezno1OlnZg9h@diet-planner.4pdqs.mongodb.net/?retryWrites=true&w=majority&appName=Diet-Planner";
-
+const mongoUrl = "mongodb+srv://vaishnavirk2203:mbZiezno1OlnZg9h@diet-planner.4pdqs.mongodb.net/?retryWrites=true&w=majority&tls=true&appName=Diet-Planner"
 mongoose
   .connect(mongoUrl, {
     useNewUrlParser: true,
-    useUnifiedTopology: true,
-    tlsInsecure: true,
+     useUnifiedTopology: true,
+    // tlsAllowInvalidCertificates: true, 
+    tlsInsecure: false,
+    ssl: true,
   })
   .then(() => {
     mongoose.set('bufferCommands', false); // Disable buffering
@@ -35,7 +37,8 @@ mongoose
 // Include user routes
 app.use(userRoutes);
 app.use("/api", userActions); 
-app.use("/api/tasks", taskRoutes)
+app.use("/api/tasks", taskRoutes);
+app.use(dashboardRoutes)
 app.post('/slack/assign', (req, res, next) => {
   console.log('POST /slack/assign route hit');
   next(); // Continue to the controller
