@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { registerUser } from "../store/authSlice"; // Import the registerUser action
+import styles from "./auth.module.css"; // Import the module CSS
 
 export default function SignUp() {
   const [fname, setFname] = useState("");
@@ -58,6 +59,8 @@ export default function SignUp() {
   };
 
   return (
+    <div className={styles.auth}>
+
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form onSubmit={handleSubmit}>
@@ -162,6 +165,7 @@ export default function SignUp() {
           </p>
         </form>
       </div>
+    </div>
     </div>
   );
 }

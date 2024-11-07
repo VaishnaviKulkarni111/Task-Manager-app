@@ -11,6 +11,7 @@ import Dashboard from "./UI/Dashboard";
 import Tasks from "./task/Tasks";
 import UserDashboard from "./UI/UserDashboard";
 import UserTasks from "./task/UserTasks";
+import Homepage from "./UI/Homepage";
 
 function App() {
   const isLoggedIn = window.localStorage.getItem("loggedIn");
@@ -25,6 +26,7 @@ function App() {
             path="/"
             element={isLoggedIn === "true" ? <UserDetails /> : <Login />}
           />
+          <Route path="/home" element={<Homepage />} />
           <Route path="/sign-in" element={<Login />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route path="/dashboard" element={<Dashboard />} />

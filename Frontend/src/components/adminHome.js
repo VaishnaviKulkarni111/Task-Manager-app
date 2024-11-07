@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Table, Container, Row, Col } from "react-bootstrap"; // Import Bootstrap components
-
 export default function AdminHome({ userData }) {
   const [data, setData] = useState([]);
 
@@ -43,6 +42,7 @@ export default function AdminHome({ userData }) {
   };
 
   return (
+    
     <Container fluid className="mt-4" style={{ marginLeft: '150px' }}>
       <Row className="justify-content-center mb-4">
         <Col xs="auto">
@@ -76,5 +76,6 @@ export default function AdminHome({ userData }) {
         </tbody>
       </Table>
     </Container>
+    
   );
 }

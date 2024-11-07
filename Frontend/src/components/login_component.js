@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux"; // Import useDispatch
 import { loginUser } from "../store/authSlice"; // Import the loginUser action
 import { useNavigate } from "react-router-dom"; // Import useNavigate for redirection
+import styles from "./auth.module.css"; // Import the module CSS
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -34,6 +35,7 @@ export default function Login() {
   }
 
   return (
+    <div className={styles.auth}>
     <div className="auth-wrapper">
       <div className="auth-inner">
         <form onSubmit={handleSubmit}>
@@ -84,6 +86,7 @@ export default function Login() {
           </p>
         </form>
       </div>
+    </div>
     </div>
   );
 }
