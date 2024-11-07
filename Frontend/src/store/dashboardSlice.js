@@ -3,7 +3,8 @@ import axios from 'axios';
 
 // Async thunk to fetch dashboard data
 export const fetchDashboardData = createAsyncThunk('dashboard/fetchData', async () => {
-  const response = await axios.get('http://localhost:5000/dashboard'); 
+  const response = await axios.get('http://localhost:5000/api/dashboard'); 
+  console.log(response)
   return response.data;
 });
 

@@ -17,14 +17,11 @@ app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: false }));
 
 
-const mongoUrl = "mongodb+srv://vaishnavirk2203:mbZiezno1OlnZg9h@diet-planner.4pdqs.mongodb.net/?retryWrites=true&w=majority&tls=true&appName=Diet-Planner"
+const mongoUrl = "mongodb+srv://vaishnavirk2203:mbZiezno1OlnZg9h@diet-planner.4pdqs.mongodb.net/?retryWrites=true&w=majority&appName=Diet-Planner"
 mongoose
   .connect(mongoUrl, {
     useNewUrlParser: true,
-     useUnifiedTopology: true,
-    // tlsAllowInvalidCertificates: true, 
-    tlsInsecure: false,
-    ssl: true,
+     useUnifiedTopology: true, 
   })
   .then(() => {
     mongoose.set('bufferCommands', false); // Disable buffering
@@ -38,7 +35,7 @@ mongoose
 app.use(userRoutes);
 app.use("/api", userActions); 
 app.use("/api/tasks", taskRoutes);
-app.use(dashboardRoutes)
+app.use("/api", dashboardRoutes)
 app.post('/slack/assign', (req, res, next) => {
   console.log('POST /slack/assign route hit');
   next(); // Continue to the controller
